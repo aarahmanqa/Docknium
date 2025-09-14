@@ -1,0 +1,107 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'signing' // only needed for Maven Central
+}
+
+group = 'com.aarahman'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            groupId = 'com.aarahman'
+            artifactId = 'docknium'
+            version = '1.0.0'
+
+            pom {
+                name = 'Selenium Grid Util'
+                description = 'Utility library for managing Selenium Grid with Docker and Selenium Java.'
+                url = 'https://github.com/aarahmanqa/Docknium'
+
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'aarahmanqa'
+                        name = 'Ahamed Abdul Rahman'
+                        email = 'ahamedabdulrahman@gmail.com' // replace with your preferred public email
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/aarahmanqa/Docknium.git'
+                    developerConnection = 'scm:git:ssh://github.com/aarahmanqa/Docknium.git'
+                    url = 'https://github.com/aarahmanqa/Docknium'
+                }
+            }
+        }
+    }
+
+    repositories {
+        // For local testing
+        maven {
+            name = "localTest"
+            url = layout.buildDirectory.dir("repo")
+        }
+
+        // For Maven Central (Sonatype OSSRH)
+        maven {
+            name = "OSSRH"
+            def releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            def snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.findProperty("ossrhUsername") ?: ""
+                password = project.findProperty("ossrhPassword") ?: ""
+            }
+        }
+    }
+}
+
+dependencies {
+    //TestNG
+    compileOnly 'org.testng:testng:7.7.0'
+    runtimeOnly 'org.testng:testng:7.7.0'
+    annotationProcessor 'org.testng:testng:7.7.0'
+    testImplementation 'org.testng:testng:7.7.0'
+    implementation 'org.testng:testng:7.7.0'
+
+    //Docker
+    implementation 'com.github.docker-java:docker-java:3.4.1'
+    implementation 'com.github.docker-java:docker-java-transport-httpclient5:3.4.1'
+
+    //Selenium
+    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
+    implementation 'org.seleniumhq.selenium:selenium-devtools-v134:4.31.0'
+
+    // Logging dependencies
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'ch.qos.logback:logback-classic:1.5.13'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+}
+
+test {
+    useTestNG()
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
