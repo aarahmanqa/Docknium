@@ -25,13 +25,17 @@ A comprehensive Java utility library for managing Selenium Grid with Docker cont
 ## Maven Dependency
 
 ```xml
-<!-- Maven dependency will be added here -->
+<dependency>
+    <groupId>io.github.aarahman7</groupId>
+    <artifactId>docknium</artifactId>
+    <version>0.0.1</version>
+</dependency>
 ```
 
 ## Gradle Dependency
 
 ```gradle
-// Gradle dependency will be added here
+implementation 'io.github.aarahman7:docknium:0.0.1'
 ```
 
 ## Quick Start
@@ -45,7 +49,7 @@ SeleniumGridData seleniumGridData = SeleniumGridData.builder()
     .browser(Browser.CHROME)
     .recordVideo(true)
     .headless(false)
-    .colimaToBeLaunched(true) // For macOS users
+    .colimaToBeLaunched(true) // For macOS users if you use colima for Docker locally
     .build();
 ```
 Please refer here for more update on "Colima" - https://github.com/abiosoft/colima.

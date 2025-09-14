@@ -38,7 +38,9 @@ public class BaseTest {
 
     @AfterMethod
     public void afterMethod() {
-        driver.quit();
+        if(driver != null) {
+            driver.quit();
+        }
         seleniumGridUtil.stopAndRemoveNodeContainer();
     }
 
